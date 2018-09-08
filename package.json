@@ -1,0 +1,16 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build ./src/index.html",
+    "start": "parcel ./src/index.html"
+  },
+  "author": "Mark Wilkins",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^1.9.7",
+    "typescript": "^3.0.3"
+  }
+}
