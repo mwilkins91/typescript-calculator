@@ -54,7 +54,7 @@ class Calculator {
       this.displayShouldClear = false;
     }
 
-    if (this.currentOperator) {
+    if (this.currentOperator && this.onDisplay) {
       if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
         this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
       }
@@ -125,6 +125,7 @@ class Calculator {
         break;
       case 'clear':
         this.clear();
+        break;
       case '.':
         if (
           typeof this.onDisplay === 'string' &&
@@ -141,6 +142,7 @@ class Calculator {
           this.fireDisplayUpdateHandlers();
           this.displayShouldClear = false;
         }
+        break;
       default:
         break;
     }

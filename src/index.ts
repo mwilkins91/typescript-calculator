@@ -1,10 +1,11 @@
 import Calculator from './modules/Calculator';
 
 declare interface ElementEvent extends Event {
+  currentTarget: HTMLElement;
   target: HTMLElement;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function init() {
 
   const display: HTMLParagraphElement = document.querySelector('p#display');
   const calc = new Calculator();
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
   calc.onDisplayUpdate(handleDisplayUpdate);
 
   const handleBtnClick = (e: ElementEvent) => {
-    const el = e.target;
+    const el = e.currentTarget;
     const {
       value,
       type
@@ -30,4 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   calcBtns.forEach(btn => btn.addEventListener('click', handleBtnClick));
 
-});
+}
+
+document.addEventListener('DOMContentLoaded', init);
