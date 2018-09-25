@@ -1,7 +1,13 @@
 // UI buttons for calculator
 interface button {
-  type: string; //'number' | 'operator' | 'action'
+  type: string; // 'number' | 'operator' | 'action'
   value: string;
+}
+
+interface history {
+  operation: Function;
+  leftNum: number,
+  rightNum: number
 }
 
 // Math operations
@@ -25,8 +31,10 @@ class Calculator {
   displayShouldClear: boolean;
   onDisplayUpdateHandlers: [Function];
   onDisplay: string;
+  history: history[];
 
   constructor() {
+    this.history = [];
     this.onDisplayUpdateHandlers = [() => console.log('Starting Display Handlers...')];
     this.clear();
   }
@@ -49,12 +57,13 @@ class Calculator {
   }
 
   numberPressed(btn: button) {
+    const isNegativeZero = this.onDisplay === '-0';
     if (this.displayShouldClear) {
       this.clear()
       this.displayShouldClear = false;
     }
 
-    if (this.currentOperator && this.onDisplay) {
+    if (this.currentOperator && this.onDisplay && !isNegativeZero) {
       if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
         this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
       }
@@ -73,8 +82,8 @@ class Calculator {
       this.currentOperator = null;
     }
 
-    if (this.onDisplay === null) {
-      this.onDisplay = btn.value;
+    if (this.onDisplay === null || isNegativeZero) {
+      this.onDisplay = isNegativeZero ? '-' + btn.value : btn.value;
       this.fireDisplayUpdateHandlers();
       return;
     }
@@ -93,12 +102,31 @@ class Calculator {
     if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
       this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
     }
-    const operation = operations[this.currentOperator || this.lastOperator];
-    const result = operation(this.currentTotal, parseFloat(this.onDisplay));
+
+    let leftNum;
+    let rightNum;
+    let operation;
+    if (this.displayShouldClear) { // Hitting evaluate again just after an evaluation...
+      const latestOperation = this.history[this.history.length - 1];
+      leftNum =  parseFloat(this.onDisplay);
+      rightNum = latestOperation.rightNum;
+      operation = latestOperation.operation;
+    } else {
+      leftNum = this.currentTotal;
+      rightNum = parseFloat(this.onDisplay);
+      operation = operations[this.currentOperator || this.lastOperator];
+    }
+
+    const result = operation(leftNum, rightNum);
     this.currentTotal = null;
     this.onDisplay = result.toString();
     this.fireDisplayUpdateHandlers();
     this.displayShouldClear = true;
+    this.history.push({
+      operation: operation,
+      leftNum,
+      rightNum
+    })
     return result;
   }
 
@@ -142,6 +170,21 @@ class Calculator {
           this.fireDisplayUpdateHandlers();
           this.displayShouldClear = false;
         }
+        break;
+      case 'switchPolarity':
+        if(this.currentOperator && this.onDisplay) {
+          this.currentTotal = parseFloat(this.onDisplay);          
+        }
+        if ( !this.onDisplay || (this.onDisplay && this.currentOperator)) {
+          this.onDisplay = "0";
+        }
+        if ( this.onDisplay.substr(0, 1) === '-' ) {
+          this.onDisplay = this.onDisplay.substr(1, this.onDisplay.length);
+        } else {
+          this.onDisplay = '-' + this.onDisplay;
+        }
+        this.displayShouldClear = false;
+        this.fireDisplayUpdateHandlers();
         break;
       default:
         break;

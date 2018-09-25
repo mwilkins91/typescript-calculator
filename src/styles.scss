@@ -117,10 +117,26 @@ html {
   border-left: $border;
 }
 
+.other {
+  display: flex;
+}
+
 [data-value="evaluate"] {
-  width: 100%;
+  width: 75%;
+  height: $tileWidth;
+  border-bottom: $border;
+  border-left: $border;
+}
+
+[data-value="switchPolarity"] {
+  width: 25%;
   height: $tileWidth;
   border-bottom: $border;
   border-right: $border;
   border-left: $border;
+  background: $color2;
+  &:hover {
+    background: $color2-hover;
+    cursor: pointer;
+  }
 }
