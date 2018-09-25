@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "outFile": "../../dist",
+      "sourceMap": true,
+      "lib": [
+        "dom",
+        "es7"
+      ],
+  }
+}

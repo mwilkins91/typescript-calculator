@@ -11,13 +11,13 @@ interface history {
 }
 
 // Math operations
-const add = (a: number, b: number): number => a + b;
-const subtract = (a: number, b: number): number => a - b;
-const divide = (a: number, b: number): number => a / b;
-const multiply = (a: number, b: number): number => a * b;
+const add : Function = (a: number, b: number): number => a + b;
+const subtract : Function = (a: number, b: number): number => a - b;
+const divide : Function = (a: number, b: number): number => a / b;
+const multiply : Function = (a: number, b: number): number => a * b;
 
 // map symbols to math operations
-const operations = {
+const operations:{ [index:string] : Function } = {
   '+': add,
   '-': subtract,
   '*': multiply,
