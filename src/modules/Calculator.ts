@@ -39,11 +39,11 @@ class Calculator {
     this.clear();
   }
 
-  fireDisplayUpdateHandlers() {
+  fireDisplayUpdateHandlers():void {
     this.onDisplayUpdateHandlers.forEach(func => func(this.onDisplay));
   }
 
-  onDisplayUpdate(func: Function) {
+  onDisplayUpdate(func: Function):void {
     this.onDisplayUpdateHandlers.push(func);
   }
 
@@ -64,9 +64,8 @@ class Calculator {
     }
 
     if (this.currentOperator && this.onDisplay && !isNegativeZero) {
-      if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
-        this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
-      }
+
+      this.removeHangingDecimal();
 
       if (this.currentTotal) {
         const operation = operations[this.currentOperator];
@@ -82,12 +81,14 @@ class Calculator {
       this.currentOperator = null;
     }
 
+    // We handle null/-0 the same, replace them with the number pressed
     if (this.onDisplay === null || isNegativeZero) {
       this.onDisplay = isNegativeZero ? '-' + btn.value : btn.value;
       this.fireDisplayUpdateHandlers();
       return;
     }
 
+    // Don't let more than one 0 be displayed
     if (this.onDisplay === '0' && btn.value === '0') {
       return;
     }
@@ -97,16 +98,22 @@ class Calculator {
     return;
   }
 
-  evaluate() {
-    if (!this.currentOperator && !this.lastOperator) return;
+  removeHangingDecimal() {
     if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
       this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
     }
+  }
+
+  evaluate() {
+    // No operator? Can't evaluate
+    if (!this.currentOperator && !this.lastOperator) return;
+
+    this.removeHangingDecimal()
 
     let leftNum;
     let rightNum;
     let operation;
-    if (this.displayShouldClear) { // Hitting evaluate again just after an evaluation...
+    if (this.displayShouldClear) { // Hitting evaluate again just after an evaluation, repeat op
       const latestOperation = this.history[this.history.length - 1];
       leftNum =  parseFloat(this.onDisplay);
       rightNum = latestOperation.rightNum;
