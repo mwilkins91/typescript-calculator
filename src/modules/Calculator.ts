@@ -199,8 +199,6 @@ class Calculator {
   }
 
   buttonPressed = (btn: button) => {
-    console.log(this);
-    // debugger;
     switch (btn.type) {
       case 'number':
         this.numberPressed(btn);

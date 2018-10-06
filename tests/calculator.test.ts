@@ -316,4 +316,51 @@ describe('Math operators', () => {
     ]);
     expect(callback.callCount).to.equal(4);
   });
+
+  it('can be cleared', () => {
+    const calc = new Calculator();
+    calc.pressButtons([
+      {
+        type: 'number',
+        value: '1',
+      },
+      {
+        type: 'operator',
+        value: '+',
+      },
+      {
+        type: 'number',
+        value: '1',
+      },
+      {
+        type: 'operator',
+        value: '*',
+      },
+      {
+        type: 'number',
+        value: '2',
+      },
+      {
+        type: 'operator',
+        value: '-',
+      },
+      {
+        type: 'number',
+        value: '1',
+      },
+      {
+        type: 'operator',
+        value: 'evaluate',
+      },
+    ]);
+
+    expect(calc.onDisplay).to.equal('3');
+
+    calc.buttonPressed({
+      type: 'operator',
+      value: 'clear'
+    })
+
+    expect(calc.onDisplay).to.equal(null);
+  });
 });
