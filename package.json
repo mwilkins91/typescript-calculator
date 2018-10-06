@@ -13,11 +13,13 @@
   "devDependencies": {
     "@types/chai": "^4.1.5",
     "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.4",
     "chai": "^4.1.2",
     "eslint": "^5.6.0",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.3",
     "parcel": "^1.9.7",
+    "sinon": "^6.3.5",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3"
   },

@@ -1,6 +1,7 @@
 import Calculator from '../src/modules/Calculator';
 import { expect } from 'chai';
 import 'mocha';
+import sinon, { SinonSpy } from 'sinon';
 
 describe('basic', () => {
   it('Can be instantiated', () => {
@@ -250,7 +251,7 @@ describe('Math operators', () => {
     }
   });
 
-  it('Multiple operators can be chained together', () => {
+  it('allows multiple operators to be chained together', () => {
     const calc = new Calculator();
     calc.pressButtons([
       {
@@ -288,6 +289,31 @@ describe('Math operators', () => {
     ]);
 
     expect(calc.onDisplay).to.equal('3');
+  });
 
+  it('calls update display when a button is pressed', () => {
+    const calc = new Calculator();
+    const callback: SinonSpy = sinon.spy();
+    calc.onDisplayUpdate(callback);
+
+    calc.pressButtons([
+      {
+        type: 'number',
+        value: '1',
+      },
+      {
+        type: 'operator',
+        value: '+',
+      },
+      {
+        type: 'number',
+        value: '1',
+      },
+      {
+        type: 'operator',
+        value: 'evaluate',
+      },
+    ]);
+    expect(callback.callCount).to.equal(4);
   });
 });

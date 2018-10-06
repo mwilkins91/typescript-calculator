@@ -9,9 +9,6 @@
         "dom",
         "es7"
       ],
+      "esModuleInterop": true
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts"
-  ]
 }
