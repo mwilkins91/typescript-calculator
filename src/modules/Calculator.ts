@@ -29,25 +29,25 @@ class Calculator {
   currentOperator: string; // What the active operator is
   lastOperator: string; // The last operator that was pressed
   displayShouldClear: boolean;
-  onDisplayUpdateHandlers: [Function];
+  onDisplayUpdateHandlers: Array<Function>;
   onDisplay: string;
   history: history[];
 
   constructor() {
     this.history = [];
-    this.onDisplayUpdateHandlers = [() => console.log('Starting Display Handlers...')];
+    this.onDisplayUpdateHandlers = [];
     this.clear();
   }
 
-  fireDisplayUpdateHandlers():void {
+  fireDisplayUpdateHandlers = ():void => {
     this.onDisplayUpdateHandlers.forEach(func => func(this.onDisplay));
   }
 
-  onDisplayUpdate(func: Function):void {
+  onDisplayUpdate = (func: Function):void => {
     this.onDisplayUpdateHandlers.push(func);
   }
 
-  offDisplayUpdate(func: Function): boolean {
+  offDisplayUpdate = (func: Function): boolean => {
     const index = this.onDisplayUpdateHandlers.indexOf(func);
     if (index > -1) {
       this.onDisplayUpdateHandlers.splice(index, 1);
@@ -56,7 +56,7 @@ class Calculator {
     return false;
   }
 
-  numberPressed(btn: button) {
+  numberPressed = (btn: button) => {
     const isNegativeZero = this.onDisplay === '-0';
     if (this.displayShouldClear) {
       this.clear()
@@ -68,7 +68,7 @@ class Calculator {
       this.removeHangingDecimal();
 
       if (this.currentTotal) {
-        const operation = operations[this.currentOperator];
+        const operation = operations[this.lastOperator];
         const result = operation(this.currentTotal, parseFloat(this.onDisplay));
         this.currentTotal = result;
       } else {
@@ -98,13 +98,13 @@ class Calculator {
     return;
   }
 
-  removeHangingDecimal() {
+  removeHangingDecimal = () => {
     if (this.onDisplay.indexOf('.') === this.onDisplay.length) {
       this.onDisplay = this.onDisplay.slice(0, this.onDisplay.length - 1);
     }
   }
 
-  evaluate() {
+  evaluate = () => {
     // No operator? Can't evaluate
     if (!this.currentOperator && !this.lastOperator) return;
 
@@ -137,7 +137,7 @@ class Calculator {
     return result;
   }
 
-  clear() {
+  clear = () => {
     this.onDisplay = null;
     this.fireDisplayUpdateHandlers();
     this.currentTotal = null;
@@ -146,7 +146,7 @@ class Calculator {
     this.displayShouldClear = true;
   }
 
-  actionPressed(btn: button) {
+  actionPressed = (btn: button) => {
     switch (btn.value) {
       case 'evaluate':
         this.evaluate();
@@ -198,7 +198,9 @@ class Calculator {
     }
   }
 
-  buttonPressed(btn: button) {
+  buttonPressed = (btn: button) => {
+    console.log(this);
+    // debugger;
     switch (btn.type) {
       case 'number':
         this.numberPressed(btn);
@@ -210,6 +212,10 @@ class Calculator {
         throw new Error('Button type not recognized!');
     }
     return;
+  }
+
+  pressButtons = (arr: Array<button>) => {
+    arr.forEach(this.buttonPressed);
   }
 }
 

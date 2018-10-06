@@ -9,5 +9,9 @@
         "dom",
         "es7"
       ],
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ]
 }
