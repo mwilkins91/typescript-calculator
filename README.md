@@ -27,9 +27,9 @@ A class based calculator implementation with functions for evaluating mathematic
 ```ts
 const calculator = new Calculator();
 calculator.onDisplayUpdate((val) => console.log("Calculator display: ", val));
-calculator.numberPressed({ type: "number", value: "2" });
-calculator.numberPressed({ type: "operator", value: "+" });
-calculator.numberPressed({ type: "number", value: "2" });
+calculator.buttonPressed({ type: "number", value: "2" });
+calculator.buttonPressed({ type: "operator", value: "+" });
+calculator.buttonPressed({ type: "number", value: "2" });
 calculator.evaluate();
 
 // Output:
